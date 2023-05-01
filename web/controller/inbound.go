@@ -17,6 +17,16 @@ type InboundController struct {
 	xrayService    service.XrayService
 }
 
+type InboundStats struct {
+	Remark   string `json:"string"`
+	Up       int64  `json:"up"`
+	Down     int64  `json:"down"`
+	Expiry   int64  `json:"expiry"`
+	Traffic  int64  `json:"traffic"`
+	Port     int    `json:"port"`
+	Protocol string `json:"protocol"`
+}
+
 func NewInboundController(g *gin.RouterGroup) *InboundController {
 	a := &InboundController{}
 	a.initRouter(g)
@@ -66,6 +76,32 @@ func (a *InboundController) getAllInbounds(c *gin.Context) {
 	jsonObj(c, inbounds, nil)
 }
 
+func (a *InboundController) getAllInboundsStats(c *gin.Context) {
+	inbounds, err := a.inboundService.GetAllInbounds()
+	if err != nil {
+		fmt.Println(err.Error())
+		jsonMsg(c, "获取", err)
+		return
+	}
+
+	var inboundsStats []*InboundStats
+	for _, inbound := range inbounds {
+		stats := &InboundStats{
+			Remark:   inbound.Remark,
+			Up:       inbound.Up,
+			Down:     inbound.Down,
+			Traffic:  inbound.Total,
+			Expiry:   inbound.ExpiryTime,
+			Port:     inbound.Port,
+			Protocol: string(inbound.Protocol),
+		}
+		inboundsStats = append(inboundsStats, stats)
+	}
+
+	jsonObj(c, inboundsStats, nil)
+
+}
+
 func (a *InboundController) getInboundByName(c *gin.Context) {
 	name := c.Param("name")
 	inbound, err := a.inboundService.GetInboundByName(name)
@@ -75,7 +111,17 @@ func (a *InboundController) getInboundByName(c *gin.Context) {
 		return
 	}
 
-	jsonObj(c, inbound, nil)
+	stats := &InboundStats{
+		Remark:   inbound.Remark,
+		Up:       inbound.Up,
+		Down:     inbound.Down,
+		Traffic:  inbound.Total,
+		Expiry:   inbound.ExpiryTime,
+		Port:     inbound.Port,
+		Protocol: string(inbound.Protocol),
+	}
+
+	jsonObj(c, stats, nil)
 }
 
 func (a *InboundController) addInbound(c *gin.Context) {
