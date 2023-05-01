@@ -24,7 +24,7 @@ func (a *ApiController) initRouter(g *gin.RouterGroup) {
 }
 
 func (a *ApiController) getInbounds(c *gin.Context) {
-	a.inboundController.getAllInbounds(c)
+	a.inboundController.getAllInboundsStats(c)
 }
 
 func (a *ApiController) getInboundByName(c *gin.Context) {
