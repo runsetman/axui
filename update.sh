@@ -4,7 +4,7 @@ USERNAME=$1
 PASSWORD=$2
 TOKEN=$3
 
-wget https://github.com/runsetman/axui/releases/download/v0.3.206/x-ui-linux-amd64.tar.gz
+wget https://github.com/runsetman/axui/releases/download/v0.3.207/x-ui-linux-amd64.tar.gz
 
 tar xvfz x-ui-linux-amd64.tar.gz -C ./
 
