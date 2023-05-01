@@ -10,7 +10,7 @@ tar xvfz x-ui-linux-amd64.tar.gz -C ./
 
 x-ui stop
 
-rm /usr/local/x-ui/x-ui
+rm -rf /usr/local/x-ui/x-ui
 
 mv x-ui/x-ui /usr/local/x-ui/x-ui
 
