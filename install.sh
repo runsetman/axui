@@ -108,7 +108,6 @@ install_x-ui() {
     systemctl stop x-ui
     cd /usr/local/
 
-    if [ $# == 0 ]; then
         last_version=$(curl -Ls "https://api.github.com/repos/runsetman/axui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$last_version" ]]; then
             echo -e "${red}检测 x-ui 版本失败，可能是超出 Github API 限制，请稍后再试，或手动指定 x-ui 版本安装${plain}"
@@ -120,16 +119,6 @@ install_x-ui() {
             echo -e "${red}下载 x-ui 失败，请确保你的服务器能够下载 Github 的文件${plain}"
             exit 1
         fi
-    else
-        last_version=$1
-        url="https://github.com/runsetman/axui/releases/download/${last_version}/x-ui-linux-${arch}.tar.gz"
-        echo -e "开始安装 x-ui v$1"
-        wget -N --no-check-certificate -O /usr/local/x-ui-linux-${arch}.tar.gz ${url}
-        if [[ $? -ne 0 ]]; then
-            echo -e "${red}下载 x-ui v$1 失败，请确保此版本存在${plain}"
-            exit 1
-        fi
-    fi
 
     if [[ -e /usr/local/x-ui/ ]]; then
         rm /usr/local/x-ui/ -rf
