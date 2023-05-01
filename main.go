@@ -109,10 +109,15 @@ func showSetting(show bool) {
 		if (username == "") || (userpasswd == "") {
 			fmt.Println("current username or password is empty")
 		}
+		token, err := settingService.GetToken()
+		if err != nil {
+			fmt.Println("get current token fialed,error info:", err)
+		}
 		fmt.Println("current pannel settings as follows:")
 		fmt.Println("username:", username)
 		fmt.Println("userpasswd:", userpasswd)
 		fmt.Println("port:", port)
+		fmt.Println("token:", token)
 	}
 }
 
@@ -176,7 +181,7 @@ func updateTgbotSetting(tgBotToken string, tgBotChatid int, tgBotRuntime string)
 	}
 }
 
-func updateSetting(port int, username string, password string) {
+func updateSetting(port int, username string, password string, token string) {
 	err := database.InitDB(config.GetDBPath())
 	if err != nil {
 		fmt.Println(err)
@@ -202,6 +207,14 @@ func updateSetting(port int, username string, password string) {
 			fmt.Println("set username and password success")
 		}
 	}
+	if token != "" {
+		err := settingService.SetToken(token)
+		if err != nil {
+			fmt.Println("set token failed:", err)
+		} else {
+			fmt.Printf("set token %v success", token)
+		}
+	}
 }
 
 func main() {
@@ -223,6 +236,7 @@ func main() {
 	var port int
 	var username string
 	var password string
+	var token string
 	var tgbottoken string
 	var tgbotchatid int
 	var enabletgbot bool
@@ -234,6 +248,7 @@ func main() {
 	settingCmd.IntVar(&port, "port", 0, "set panel port")
 	settingCmd.StringVar(&username, "username", "", "set login username")
 	settingCmd.StringVar(&password, "password", "", "set login password")
+	settingCmd.StringVar(&token, "token", "", "set token")
 	settingCmd.StringVar(&tgbottoken, "tgbottoken", "", "set telegrame bot token")
 	settingCmd.StringVar(&tgbotRuntime, "tgbotRuntime", "", "set telegrame bot cron time")
 	settingCmd.IntVar(&tgbotchatid, "tgbotchatid", 0, "set telegrame bot chat id")
@@ -282,7 +297,7 @@ func main() {
 		if reset {
 			resetSetting()
 		} else {
-			updateSetting(port, username, password)
+			updateSetting(port, username, password, token)
 		}
 		if show {
 			showSetting(show)

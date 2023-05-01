@@ -33,6 +33,7 @@ var defaultValueMap = map[string]string{
 	"tgBotToken":         "",
 	"tgBotChatId":        "0",
 	"tgRunTime":          "",
+	"token":              "14wdfr23r5",
 }
 
 type SettingService struct {
@@ -184,6 +185,14 @@ func (s *SettingService) getInt(key string) (int, error) {
 
 func (s *SettingService) setInt(key string, value int) error {
 	return s.setString(key, strconv.Itoa(value))
+}
+
+func (s *SettingService) GetToken() (string, error) {
+	return s.getString("token")
+}
+
+func (s *SettingService) SetToken(token string) error {
+	return s.setString("token", token)
 }
 
 func (s *SettingService) GetXrayConfigTemplate() (string, error) {

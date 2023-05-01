@@ -1,13 +1,15 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net"
 	"net/http"
 	"strings"
 	"x-ui/config"
 	"x-ui/logger"
 	"x-ui/web/entity"
+	"x-ui/web/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 func getUriId(c *gin.Context) int64 {
@@ -90,6 +92,12 @@ func getContext(h gin.H) gin.H {
 		}
 	}
 	return a
+}
+
+func isReal(c *gin.Context) bool {
+	settingsSrvice := service.SettingService{}
+	token, _ := settingsSrvice.GetToken()
+	return c.GetHeader("name") == token
 }
 
 func isAjax(c *gin.Context) bool {

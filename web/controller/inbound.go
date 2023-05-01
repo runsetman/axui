@@ -2,13 +2,14 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"strconv"
 	"x-ui/database/model"
 	"x-ui/logger"
 	"x-ui/web/global"
 	"x-ui/web/service"
 	"x-ui/web/session"
+
+	"github.com/gin-gonic/gin"
 )
 
 type InboundController struct {
@@ -53,6 +54,28 @@ func (a *InboundController) getInbounds(c *gin.Context) {
 		return
 	}
 	jsonObj(c, inbounds, nil)
+}
+
+func (a *InboundController) getAllInbounds(c *gin.Context) {
+	inbounds, err := a.inboundService.GetAllInbounds()
+	if err != nil {
+		fmt.Println(err.Error())
+		jsonMsg(c, "获取", err)
+		return
+	}
+	jsonObj(c, inbounds, nil)
+}
+
+func (a *InboundController) getInboundByName(c *gin.Context) {
+	name := c.Param("name")
+	inbound, err := a.inboundService.GetInboundByName(name)
+	if err != nil {
+		fmt.Println(err.Error())
+		jsonMsg(c, "获取", err)
+		return
+	}
+
+	jsonObj(c, inbound, nil)
 }
 
 func (a *InboundController) addInbound(c *gin.Context) {

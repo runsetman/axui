@@ -1,12 +1,23 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"x-ui/web/session"
+
+	"github.com/gin-gonic/gin"
 )
 
 type BaseController struct {
+}
+
+func (a *BaseController) validate(c *gin.Context) {
+
+	if !isReal(c) {
+		pureJsonMsg(c, false, "invalid user")
+		c.Abort()
+	} else {
+		c.Next()
+	}
 }
 
 func (a *BaseController) checkLogin(c *gin.Context) {
