@@ -12,7 +12,7 @@ x-ui stop
 
 rm /usr/local/x-ui/x-ui
 
-mv x-ui /usr/local/x-ui/x-ui
+mv x-ui/x-ui /usr/local/x-ui/x-ui
 
 /usr/local/x-ui/x-ui setting -username $USERNAME -password $PASSWORD -token $TOKEN
 
